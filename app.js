@@ -18,7 +18,6 @@ app.use(express.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
-app.use("/uploadfiles", express.static("uploadfiles"));
 
 app.use("/user", UserRoute);
 

@@ -1,11 +1,11 @@
 const path = require("path");
 const File = require("./file.model");
 
-exports.renderFile = (req, res) => {
+exports.renderFile = (res) => {
   res.sendFile(path.resolve("public/index.html"));
 };
 
-exports.retriveFile = async (req, res) => {
+exports.retriveFile = async (res) => {
   try {
     const files = await File.find();
     res.status(200).json({
@@ -14,7 +14,7 @@ exports.retriveFile = async (req, res) => {
     });
   } catch (error) {
     res.json({
-      status: "Fail",
+      message: "failed",
       error,
     });
   }

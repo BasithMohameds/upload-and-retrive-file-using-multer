@@ -1,22 +1,26 @@
 const File = require("./file.model");
+const express = require("express");
+const path = require("path");
 
 //single file
-exports.UploadeFile = async (req, res) => {
+exports.UploadeFile = async ({ file = {} }, res) => {
+  const { filename, mimetype, originalname } = file;
   try {
-    console.log(req.file, "file");
+    const dynamicFolder = originalname.split(".").shift();
+    const FileUrl = process.env.baseUrl + dynamicFolder + "/" + originalname;
     const newFile = await File.create({
-      name: req.file.filename,
-      type: req.file.mimetype,
-      url: process.env.baseUrl + req.file.originalname,
+      name: filename,
+      type: mimetype,
+      url: FileUrl,
     });
     res.status(200).json({
-      status: "success",
-      message: "File created successfully!!",
+      message: "File uploaded successfully!!",
       file: newFile,
     });
   } catch (error) {
     res.json({
-      error,
+      message: "File upload failed",
+      error: error,
     });
   }
 };

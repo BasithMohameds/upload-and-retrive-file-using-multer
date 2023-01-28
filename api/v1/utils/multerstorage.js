@@ -1,12 +1,21 @@
 const multer = require("multer");
+const fs = require("fs");
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploadfiles");
+  destination: async (req, file, cb) => {
+    const { originalname } = file;
+    const result = originalname.split(".").shift();
+    const path = `./public/uploadFiles/${result}`;
+    fs.mkdirSync(path);
+    cb(null, path);
   },
   filename: (req, files, cb) => {
-    cb(null, files.originalname);
+    const { originalname } = files;
+    cb(null, originalname);
   },
 });
 
-exports.upload = multer({ storage: storage });
+exports.upload = multer({
+  storage: storage,
+  limits: { fileSize: 1024 * 1024 * 5 },
+});
