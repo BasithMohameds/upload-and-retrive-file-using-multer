@@ -2,11 +2,16 @@ const multer = require("multer");
 const fs = require("fs");
 
 const storage = multer.diskStorage({
-  destination: async (req, file, cb) => {
+  destination: async (req, file, cb, res) => {
     const { originalname } = file;
     const result = originalname.split(".").shift();
     const path = `./public/uploadFiles/${result}`;
-    fs.mkdirSync(path);
+    const existFolder = fs.existsSync(path);
+    if (existFolder) {
+      throw Error("already exist");
+    } else {
+      fs.mkdirSync(path);
+    }
     cb(null, path);
   },
   filename: (req, files, cb) => {

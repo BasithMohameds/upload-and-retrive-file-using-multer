@@ -1,6 +1,4 @@
 const File = require("./file.model");
-const express = require("express");
-const path = require("path");
 
 //single file
 exports.UploadeFile = async ({ file = {} }, res) => {
